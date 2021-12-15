@@ -1,4 +1,4 @@
-package com.daroguzo.simplelms.member;
+package com.daroguzo.simplelms.member.model;
 
 import lombok.Builder;
 import lombok.Getter;

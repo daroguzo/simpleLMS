@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class MemberInput {
+public class MemberDto {
 
     private String userId;
     private String username;

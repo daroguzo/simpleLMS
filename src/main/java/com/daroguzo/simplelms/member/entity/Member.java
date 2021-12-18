@@ -15,7 +15,7 @@ public class Member {
     @Id @GeneratedValue
     private long id;
 
-    private String userId;
+    private String email;
     private String username;
     private String phone;
     private String password;

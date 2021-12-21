@@ -51,11 +51,30 @@ public class MemberServiceImpl implements MemberService{
         return true;
     }
 
+    /**
+     * uuid에 해당하는 계정 활성화
+     */
+    @Transactional
+    @Override
+    public boolean emailAuth(String uuid) {
+        Optional<Member> optionalMember = memberRepository.findByEmailAuthKey(uuid);
+        if (optionalMember.isEmpty()) {
+            return false;
+        }
+
+        Member member = optionalMember.get();
+        member.setEmailAuthorized(true);
+        member.setEmailAuthDt(LocalDateTime.now());
+        memberRepository.save(member);
+
+        return true;
+    }
+
     private void sendAuthEmail(String email, String uuid) {
         String subject = "LMS 시스템에 오신 것을 환영합니다.";
         String text = "<h2>LMS 시스템 가입 안내<h2>" +
                 "<p>아래 링크를 클릭하고 가입 절차를 완료하세요.</p>" +
-                "<div><a href='http://localhost:8080/member/email-auth?id=" + uuid + "'>가입 완료</a></div>";
+                "<div><a href='http://localhost:8080/member/email-auth?uuid=" + uuid + "'>가입 완료</a></div>";
         mailComponents.sendMail(email, subject, text);
     }
 }

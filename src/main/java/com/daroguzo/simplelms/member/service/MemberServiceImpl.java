@@ -35,15 +35,15 @@ public class MemberServiceImpl implements MemberService{
 
         String uuid = UUID.randomUUID().toString();
 
-        Member member = new Member();
-        member.setEmail(memberDto.getEmail());
-        member.setUsername(memberDto.getUsername());
-        member.setPassword(memberDto.getPassword());
-        member.setPhone(memberDto.getPhone());
-        member.setRegDt(LocalDateTime.now());
-        member.setEmailAuthorized(false);
-        member.setEmailAuthKey(uuid);
-
+        Member member = Member.builder()
+                .email(memberDto.getEmail())
+                .username(memberDto.getUsername())
+                .password(memberDto.getPassword())
+                .phone(memberDto.getPhone())
+                .regDt(LocalDateTime.now())
+                .isEmailAuthorized(false)
+                .emailAuthKey(uuid)
+                .build();
         memberRepository.save(member);
 
         sendAuthEmail(memberDto.getEmail(), uuid);

@@ -1,7 +1,6 @@
 package com.daroguzo.simplelms.member.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,7 +8,9 @@ import javax.persistence.Id;
 import java.time.LocalDateTime;
 
 @Entity
-@Getter @Setter
+@Getter @Setter @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Member {
 
     @Id @GeneratedValue
@@ -22,5 +23,7 @@ public class Member {
     private LocalDateTime regDt;
 
     private boolean isEmailAuthorized;
+    private LocalDateTime emailAuthDt;
     private String emailAuthKey;
+
 }

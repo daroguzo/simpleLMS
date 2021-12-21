@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>회원 활성화</title>
+</head>
+<body>
+    <h1>회원 활성화</h1>
+
+    <div th:if="${result}">
+        <p>회원 가입이 완료되었습니다.</p>
+    </div>
+
+    <div th:unless="${result}">
+        <p>잘못된 경로입니다.</p>
+    </div>
+
+</body>
+</html>

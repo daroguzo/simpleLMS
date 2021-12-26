@@ -19,6 +19,11 @@ public class MemberController {
 
     private final MemberService memberService;
 
+    @GetMapping("/login")
+    public String login() {
+        return "member/login";
+    }
+
     @GetMapping("/register")
     public String register() {
         return "member/register";
@@ -33,13 +38,18 @@ public class MemberController {
         return "member/register_complete";
     }
 
-    @GetMapping("/email-auth")
+    @GetMapping("/email_auth")
     public String emailAuthorize(@RequestParam("uuid") String uuid, Model model) {
 
         boolean result = memberService.emailAuth(uuid);
         System.out.println(result);
         model.addAttribute("result", result);
 
-        return "member/email-auth";
+        return "member/email_auth";
+    }
+
+    @GetMapping("/info")
+    public String memberInfo() {
+        return "member/info";
     }
 }

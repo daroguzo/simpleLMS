@@ -5,10 +5,17 @@ import com.daroguzo.simplelms.member.entity.Member;
 import com.daroguzo.simplelms.member.model.MemberDto;
 import com.daroguzo.simplelms.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -76,5 +83,21 @@ public class MemberServiceImpl implements MemberService{
                 "<p>아래 링크를 클릭하고 가입 절차를 완료하세요.</p>" +
                 "<div><a href='http://localhost:8080/member/email-auth?uuid=" + uuid + "'>가입 완료</a></div>";
         mailComponents.sendMail(email, subject, text);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
+        Optional<Member> byEmail = memberRepository.findByEmail(username);
+        if (byEmail.isEmpty()) {
+            throw new UsernameNotFoundException("회원 정보가 존재하지 않습니다.");
+        }
+        Member member = byEmail.get();
+
+        List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
+        grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+
+
+        return new User(member.getUsername(), member.getPassword(), grantedAuthorities);
     }
 }

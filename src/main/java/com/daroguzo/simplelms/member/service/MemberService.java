@@ -1,8 +1,9 @@
 package com.daroguzo.simplelms.member.service;
 
 import com.daroguzo.simplelms.member.model.MemberDto;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
-public interface MemberService {
+public interface MemberService extends UserDetailsService {
 
     /**
      * 회원 가입

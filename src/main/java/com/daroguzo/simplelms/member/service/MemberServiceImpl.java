@@ -2,6 +2,7 @@ package com.daroguzo.simplelms.member.service;
 
 import com.daroguzo.simplelms.component.MailComponents;
 import com.daroguzo.simplelms.member.entity.Member;
+import com.daroguzo.simplelms.member.exception.MemberNotEmailAuthException;
 import com.daroguzo.simplelms.member.model.MemberDto;
 import com.daroguzo.simplelms.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -52,7 +53,7 @@ public class MemberServiceImpl implements MemberService{
                 .build();
         memberRepository.save(member);
 
-        // sendAuthEmail(memberDto.getEmail(), uuid);
+        sendAuthEmail(memberDto.getEmail(), uuid);
 
         return true;
     }
@@ -88,6 +89,10 @@ public class MemberServiceImpl implements MemberService{
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
         Member member = memberRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(email));
+
+        if (!member.isEmailAuthorized()) {
+            throw new MemberNotEmailAuthException("이메일 활성화가 되지 않았습니다.");
+        }
 
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
         grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_USER"));

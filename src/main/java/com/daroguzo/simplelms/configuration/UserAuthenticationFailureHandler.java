@@ -1,5 +1,6 @@
 package com.daroguzo.simplelms.configuration;
 
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 
@@ -12,9 +13,15 @@ public class UserAuthenticationFailureHandler extends SimpleUrlAuthenticationFai
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
 
+        String message = "로그인에 실패하였습니다.";
+
+        if (exception instanceof InternalAuthenticationServiceException) {
+            message = exception.getMessage();
+        }
+
         setUseForward(true);
         setDefaultFailureUrl("/member/login?error=true");
-        request.setAttribute("errorMessage", "로그인에 실패하였습니다.");
+        request.setAttribute("errorMessage", message);
 
         super.onAuthenticationFailure(request, response, exception);
     }

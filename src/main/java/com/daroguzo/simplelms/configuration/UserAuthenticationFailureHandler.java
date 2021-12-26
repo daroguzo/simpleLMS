@@ -1,6 +1,5 @@
 package com.daroguzo.simplelms.configuration;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 
@@ -16,6 +15,7 @@ public class UserAuthenticationFailureHandler extends SimpleUrlAuthenticationFai
         setUseForward(true);
         setDefaultFailureUrl("/member/login?error=true");
         request.setAttribute("errorMessage", "로그인에 실패하였습니다.");
+
         super.onAuthenticationFailure(request, response, exception);
     }
 }

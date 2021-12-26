@@ -19,7 +19,7 @@ public class MemberController {
 
     private final MemberService memberService;
 
-    @GetMapping("/login")
+    @RequestMapping("/login")
     public String login() {
         return "member/login";
     }

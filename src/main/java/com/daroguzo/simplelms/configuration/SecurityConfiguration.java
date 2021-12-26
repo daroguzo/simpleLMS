@@ -31,15 +31,18 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
+        http.csrf().disable();
+
         http.authorizeRequests()
-                .antMatchers("/",
+                .antMatchers(
+                        "/",
                         "/member/register",
-                        "member/email_auth"
+                        "/member/email_auth"
                 )
                 .permitAll();
 
         http.formLogin()
-                .loginPage("member/login")
+                .loginPage("/member/login")
                 .failureHandler(getFailureHandler())
                 .permitAll();
 

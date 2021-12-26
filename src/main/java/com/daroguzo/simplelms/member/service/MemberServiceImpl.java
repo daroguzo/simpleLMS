@@ -10,14 +10,12 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -40,12 +38,13 @@ public class MemberServiceImpl implements MemberService{
             return false;
         }
 
+        String encodedPassword = BCrypt.hashpw(memberDto.getPassword(), BCrypt.gensalt());
         String uuid = UUID.randomUUID().toString();
 
         Member member = Member.builder()
                 .email(memberDto.getEmail())
                 .username(memberDto.getUsername())
-                .password(memberDto.getPassword())
+                .password(encodedPassword)
                 .phone(memberDto.getPhone())
                 .regDt(LocalDateTime.now())
                 .isEmailAuthorized(false)
@@ -53,7 +52,7 @@ public class MemberServiceImpl implements MemberService{
                 .build();
         memberRepository.save(member);
 
-        sendAuthEmail(memberDto.getEmail(), uuid);
+        // sendAuthEmail(memberDto.getEmail(), uuid);
 
         return true;
     }
@@ -81,23 +80,19 @@ public class MemberServiceImpl implements MemberService{
         String subject = "LMS 시스템에 오신 것을 환영합니다.";
         String text = "<h2>LMS 시스템 가입 안내<h2>" +
                 "<p>아래 링크를 클릭하고 가입 절차를 완료하세요.</p>" +
-                "<div><a href='http://localhost:8080/member/email-auth?uuid=" + uuid + "'>가입 완료</a></div>";
+                "<div><a href='http://localhost:8080/member/email_auth?uuid=" + uuid + "'>가입 완료</a></div>";
         mailComponents.sendMail(email, subject, text);
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-        Optional<Member> byEmail = memberRepository.findByEmail(username);
-        if (byEmail.isEmpty()) {
-            throw new UsernameNotFoundException("회원 정보가 존재하지 않습니다.");
-        }
-        Member member = byEmail.get();
+        Member member = memberRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(email));
 
-        List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
+        Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
         grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_USER"));
 
 
-        return new User(member.getUsername(), member.getPassword(), grantedAuthorities);
+        return new User(member.getEmail(), member.getPassword(), grantedAuthorities);
     }
 }

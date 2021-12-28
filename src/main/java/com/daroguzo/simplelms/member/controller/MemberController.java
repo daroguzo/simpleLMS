@@ -1,6 +1,7 @@
 package com.daroguzo.simplelms.member.controller;
 
 import com.daroguzo.simplelms.member.model.MemberDto;
+import com.daroguzo.simplelms.member.model.ResetPasswordDto;
 import com.daroguzo.simplelms.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -53,8 +54,30 @@ public class MemberController {
         return "member/info";
     }
 
-    @GetMapping
-    public String findPassword() {
+    @GetMapping("/find/password")
+    public String getFindPassword() {
         return "member/find_password";
     }
+
+    @PostMapping("/find/password")
+    public String postFindPassword(Model model, ResetPasswordDto dto) {
+        boolean result = false;
+
+        try {
+            result = memberService.sendResetPassword(dto);
+        } catch (Exception e) {
+
+        }
+        model.addAttribute("result", result);
+
+        return "member/find_password_result";
+    }
+
+    @GetMapping("/reset/password")
+    public String resetPassword() {
+
+
+        return "/member/reset_password";
+    }
+
 }

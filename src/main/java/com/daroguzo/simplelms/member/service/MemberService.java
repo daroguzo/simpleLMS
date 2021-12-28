@@ -20,4 +20,14 @@ public interface MemberService extends UserDetailsService {
      * 패스워드 초기화 요청
      */
     boolean sendResetPassword(ResetPasswordDto dto);
+
+    /**
+     * 입력 받은 uuid 확인을 통해 비밀번호 초기화
+     */
+    boolean resetPassword(String uuid, String password);
+
+    /**
+     * 입력 받은 uuid값이 유효한지 확인
+     */
+    boolean checkResetPassword(String uuid);
 }

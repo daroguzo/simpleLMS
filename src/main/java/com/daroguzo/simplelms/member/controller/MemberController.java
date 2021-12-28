@@ -74,10 +74,26 @@ public class MemberController {
     }
 
     @GetMapping("/reset/password")
-    public String resetPassword() {
-
+    public String getResetPassword(@RequestParam("uuid") String uuid,
+                                   Model model) {
+        boolean result = memberService.checkResetPassword(uuid);
+        model.addAttribute("result", result);
 
         return "/member/reset_password";
+    }
+
+    @PostMapping("/reset/password")
+    public String PostResetPassword(Model model, ResetPasswordDto dto) {
+        boolean result = false;
+        try {
+            result = memberService.resetPassword(dto.getUuid(), dto.getPassword());
+        } catch (Exception e) {
+        }
+
+        model.addAttribute("result", result);
+        model.addAttribute("dto", dto);
+
+        return "/member/reset_password_result";
     }
 
 }

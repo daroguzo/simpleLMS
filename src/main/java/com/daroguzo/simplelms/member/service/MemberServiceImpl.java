@@ -96,6 +96,51 @@ public class MemberServiceImpl implements MemberService{
         return true;
     }
 
+    @Transactional
+    @Override
+    public boolean resetPassword(String uuid, String password) {
+
+        Optional<Member> byResetPasswordKey = memberRepository.findByResetPasswordKey(uuid);
+        Member member = byResetPasswordKey.orElseThrow(() -> new UsernameNotFoundException("uuid가 일치하지 않습니다."));
+
+        // 초기화 메일 유효성 체크
+        if (member.getResetPasswordLimitDt() == null) {
+            throw new RuntimeException("유효한 날짜가 아닙니다.");
+        }
+
+        if (member.getResetPasswordLimitDt().isBefore(LocalDateTime.now())) {
+            throw new RuntimeException("유효한 날짜가 아닙니다.");
+        }
+
+        String encodedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+        member.setPassword(encodedPassword);
+        member.setResetPasswordKey("");
+        member.setResetPasswordLimitDt(null);
+        memberRepository.save(member);
+
+        return true;
+    }
+
+    @Override
+    public boolean checkResetPassword(String uuid) {
+        Optional<Member> byResetPasswordKey = memberRepository.findByResetPasswordKey(uuid);
+        if (byResetPasswordKey.isEmpty()) {
+            return false;
+        }
+        Member member = byResetPasswordKey.get();
+
+        // 초기화 메일 유효성 체크
+        if (member.getResetPasswordLimitDt() == null) {
+            return false;
+        }
+
+        if (member.getResetPasswordLimitDt().isBefore(LocalDateTime.now())) {
+            throw new RuntimeException("유효한 날짜가 아닙니다.");
+        }
+
+        return true;
+    }
+
     private void sendAuthEmail(String email, String uuid) {
         String subject = "LMS 시스템에 오신 것을 환영합니다.";
         String text = "<h2>LMS 시스템 가입 안내<h2>" +

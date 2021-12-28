@@ -38,7 +38,7 @@ public class MemberController {
         return "member/register_complete";
     }
 
-    @GetMapping("/email_auth")
+    @GetMapping("/email-auth")
     public String emailAuthorize(@RequestParam("uuid") String uuid, Model model) {
 
         boolean result = memberService.emailAuth(uuid);
@@ -51,5 +51,10 @@ public class MemberController {
     @GetMapping("/info")
     public String memberInfo() {
         return "member/info";
+    }
+
+    @GetMapping
+    public String findPassword() {
+        return "member/find_password";
     }
 }

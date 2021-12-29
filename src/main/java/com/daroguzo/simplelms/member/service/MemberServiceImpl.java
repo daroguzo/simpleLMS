@@ -71,6 +71,11 @@ public class MemberServiceImpl implements MemberService{
         }
 
         Member member = optionalMember.get();
+
+        if (member.isEmailAuthorized()) {
+            return false;
+        }
+
         member.setEmailAuthorized(true);
         member.setEmailAuthDt(LocalDateTime.now());
         memberRepository.save(member);
@@ -168,6 +173,10 @@ public class MemberServiceImpl implements MemberService{
 
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
         grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+
+        if (member.isAdmin()) {
+            grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        }
 
 
         return new User(member.getEmail(), member.getPassword(), grantedAuthorities);

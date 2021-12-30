@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>admin member management</title>
+    <style>
+        .list table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .list table th, .list table td {
+            border:solid 1px #000;
+        }
+    </style>
+</head>
+<body>
+    <h1>관리자 회원 관리</h1>
+
+    <div th:replace="fragments/layout.html :: fragment-admin-menu"></div>
+
+    <div class="list">
+        <table>
+            <thead>
+                <tr>
+                    <th> NO </th>
+                    <th> 이메일 </th>
+                    <th> 이름 </th>
+                    <th> 연락처 </th>
+                    <th> 이메일 인증 여부 </th>
+                    <th> 가입일 </th>
+                    <th> 관리자 여부 </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="m : ${list}">
+                    <td> 1 </td>
+                    <td th:text="${m.email}"> sample@naver.com </td>
+                    <td th:text="${m.username}"> 홍길동 </td>
+                    <td th:text="${m.phone}"> 010-0000-0000 </td>
+                    <td>
+                        <p th:if="${m.emailAuthorized}"> Y </p>
+                        <p th:unless="${m.emailAuthorized}"> N </p>
+                    </td>
+                    <td th:text="${m.regDt}"> 2021.12.31 </td>
+                    <td>
+                        <p th:if="${m.isAdmin()}"> Y </p>
+                        <p th:unless="${m.isAdmin()}"> N </p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

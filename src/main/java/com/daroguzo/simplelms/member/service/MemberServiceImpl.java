@@ -146,6 +146,12 @@ public class MemberServiceImpl implements MemberService{
         return true;
     }
 
+    @Override
+    public List<Member> list() {
+
+        return memberRepository.findAll();
+    }
+
     private void sendAuthEmail(String email, String uuid) {
         String subject = "LMS 시스템에 오신 것을 환영합니다.";
         String text = "<h2>LMS 시스템 가입 안내<h2>" +

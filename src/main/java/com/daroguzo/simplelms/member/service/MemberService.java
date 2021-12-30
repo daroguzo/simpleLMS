@@ -1,8 +1,11 @@
 package com.daroguzo.simplelms.member.service;
 
+import com.daroguzo.simplelms.member.entity.Member;
 import com.daroguzo.simplelms.member.model.MemberDto;
 import com.daroguzo.simplelms.member.model.ResetPasswordDto;
 import org.springframework.security.core.userdetails.UserDetailsService;
+
+import java.util.List;
 
 public interface MemberService extends UserDetailsService {
 
@@ -30,4 +33,9 @@ public interface MemberService extends UserDetailsService {
      * 입력 받은 uuid값이 유효한지 확인
      */
     boolean checkResetPassword(String uuid);
+
+    /**
+     * 회원 목록 반환(admin)
+     */
+    List<Member> list();
 }

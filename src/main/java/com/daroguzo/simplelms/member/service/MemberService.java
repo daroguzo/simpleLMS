@@ -1,8 +1,9 @@
 package com.daroguzo.simplelms.member.service;
 
+import com.daroguzo.simplelms.admin.dto.MemberDto;
 import com.daroguzo.simplelms.member.entity.Member;
-import com.daroguzo.simplelms.member.model.MemberDto;
-import com.daroguzo.simplelms.member.model.ResetPasswordDto;
+import com.daroguzo.simplelms.member.model.MemberInput;
+import com.daroguzo.simplelms.member.model.ResetPasswordInput;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
@@ -12,7 +13,7 @@ public interface MemberService extends UserDetailsService {
     /**
      * 회원 가입
      */
-    boolean register(MemberDto memberDto);
+    boolean register(MemberInput memberInput);
 
     /**
      * uuid에 해당하는 계정 활성화
@@ -22,7 +23,7 @@ public interface MemberService extends UserDetailsService {
     /**
      * 패스워드 초기화 요청
      */
-    boolean sendResetPassword(ResetPasswordDto dto);
+    boolean sendResetPassword(ResetPasswordInput dto);
 
     /**
      * 입력 받은 uuid 확인을 통해 비밀번호 초기화
@@ -37,5 +38,5 @@ public interface MemberService extends UserDetailsService {
     /**
      * 회원 목록 반환(admin)
      */
-    List<Member> list();
+    List<MemberDto> list();
 }

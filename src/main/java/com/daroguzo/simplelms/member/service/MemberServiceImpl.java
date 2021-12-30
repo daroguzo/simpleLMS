@@ -1,10 +1,12 @@
 package com.daroguzo.simplelms.member.service;
 
+import com.daroguzo.simplelms.admin.dto.MemberDto;
+import com.daroguzo.simplelms.admin.mapper.MemberMapper;
 import com.daroguzo.simplelms.component.MailComponents;
 import com.daroguzo.simplelms.member.entity.Member;
 import com.daroguzo.simplelms.member.exception.MemberNotEmailAuthException;
-import com.daroguzo.simplelms.member.model.MemberDto;
-import com.daroguzo.simplelms.member.model.ResetPasswordDto;
+import com.daroguzo.simplelms.member.model.MemberInput;
+import com.daroguzo.simplelms.member.model.ResetPasswordInput;
 import com.daroguzo.simplelms.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -26,35 +28,36 @@ public class MemberServiceImpl implements MemberService{
 
     private final MemberRepository memberRepository;
     private final MailComponents mailComponents;
+    private final MemberMapper memberMapper;
 
     /**
      * 회원 가입
      */
     @Transactional
     @Override
-    public boolean register(MemberDto memberDto) {
+    public boolean register(MemberInput memberInput) {
 
-        Optional<Member> optionalMember = memberRepository.findByEmail(memberDto.getEmail());
+        Optional<Member> optionalMember = memberRepository.findByEmail(memberInput.getEmail());
         if (optionalMember.isPresent()) {
             // 이미 같은 email 존재
             return false;
         }
 
-        String encodedPassword = BCrypt.hashpw(memberDto.getPassword(), BCrypt.gensalt());
+        String encodedPassword = BCrypt.hashpw(memberInput.getPassword(), BCrypt.gensalt());
         String uuid = UUID.randomUUID().toString();
 
         Member member = Member.builder()
-                .email(memberDto.getEmail())
-                .username(memberDto.getUsername())
+                .email(memberInput.getEmail())
+                .username(memberInput.getUsername())
                 .password(encodedPassword)
-                .phone(memberDto.getPhone())
+                .phone(memberInput.getPhone())
                 .regDt(LocalDateTime.now())
                 .isEmailAuthorized(false)
                 .emailAuthKey(uuid)
                 .build();
         memberRepository.save(member);
 
-        sendAuthEmail(memberDto.getEmail(), uuid);
+        sendAuthEmail(memberInput.getEmail(), uuid);
 
         return true;
     }
@@ -85,7 +88,7 @@ public class MemberServiceImpl implements MemberService{
 
     @Transactional
     @Override
-    public boolean sendResetPassword(ResetPasswordDto dto) {
+    public boolean sendResetPassword(ResetPasswordInput dto) {
 
         Optional<Member> byEmail = memberRepository.findByEmailAndUsername(
                 dto.getEmail(),
@@ -147,9 +150,11 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
-    public List<Member> list() {
+    public List<MemberDto> list() {
 
-        return memberRepository.findAll();
+        MemberDto memberDto = new MemberDto();
+
+        return memberMapper.selectList(memberDto);
     }
 
     private void sendAuthEmail(String email, String uuid) {

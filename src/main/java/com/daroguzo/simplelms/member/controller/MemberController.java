@@ -1,7 +1,7 @@
 package com.daroguzo.simplelms.member.controller;
 
-import com.daroguzo.simplelms.member.model.MemberDto;
-import com.daroguzo.simplelms.member.model.ResetPasswordDto;
+import com.daroguzo.simplelms.member.model.MemberInput;
+import com.daroguzo.simplelms.member.model.ResetPasswordInput;
 import com.daroguzo.simplelms.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -31,9 +31,9 @@ public class MemberController {
     }
 
     @PostMapping("/register")
-    public String registerSubmit(Model model, HttpServletRequest request, MemberDto memberDto) {
+    public String registerSubmit(Model model, HttpServletRequest request, MemberInput memberInput) {
 
-        boolean result = memberService.register(memberDto);
+        boolean result = memberService.register(memberInput);
         model.addAttribute("result", result);
 
         return "member/register_complete";
@@ -60,7 +60,7 @@ public class MemberController {
     }
 
     @PostMapping("/find/password")
-    public String postFindPassword(Model model, ResetPasswordDto dto) {
+    public String postFindPassword(Model model, ResetPasswordInput dto) {
         boolean result = false;
 
         try {
@@ -83,7 +83,7 @@ public class MemberController {
     }
 
     @PostMapping("/reset/password")
-    public String PostResetPassword(Model model, ResetPasswordDto dto) {
+    public String PostResetPassword(Model model, ResetPasswordInput dto) {
         boolean result = false;
         try {
             result = memberService.resetPassword(dto.getUuid(), dto.getPassword());

@@ -1,14 +1,13 @@
 package com.daroguzo.simplelms.member.model;
 
-import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
+import lombok.ToString;
 
-@Getter
-@Builder
-public class MemberDto {
-
+@ToString
+@Data
+public class ResetPasswordInput {
     private String email;
     private String username;
     private String password;
-    private String phone;
+    private String uuid;
 }

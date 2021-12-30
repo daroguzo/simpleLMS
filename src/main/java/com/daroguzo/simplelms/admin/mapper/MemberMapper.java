@@ -1,0 +1,13 @@
+package com.daroguzo.simplelms.admin.mapper;
+
+import com.daroguzo.simplelms.admin.dto.MemberDto;
+import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
+
+@Mapper
+public interface MemberMapper {
+
+    List<MemberDto> selectList(MemberDto memberDto);
+
+}

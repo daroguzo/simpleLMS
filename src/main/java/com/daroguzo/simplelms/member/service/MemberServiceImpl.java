@@ -18,6 +18,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -153,7 +154,20 @@ public class MemberServiceImpl implements MemberService{
     @Override
     public List<MemberDto> list(MemberParam memberParam) {
 
-        return memberMapper.selectList(memberParam);
+        long totalCount = memberMapper.selectListCount(memberParam);
+        List<MemberDto> list = memberMapper.selectList(memberParam);
+
+        // 총 개수 추가
+        if (!CollectionUtils.isEmpty(list)) {
+            int i = 0;
+            for(MemberDto m : list) {
+                m.setTotalCount(totalCount);
+                m.setSeq(totalCount - memberParam.getPageStart() - i);
+                i++;
+            }
+        }
+
+        return list;
     }
 
     private void sendAuthEmail(String email, String uuid) {

@@ -21,4 +21,9 @@ public class MemberDto {
     LocalDateTime resetPasswordLimitDt;
 
     boolean isAdmin;
+
+    // 전체 개수
+    long totalCount;
+    // sequence
+    long seq;
 }

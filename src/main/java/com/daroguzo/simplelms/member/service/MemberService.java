@@ -1,6 +1,7 @@
 package com.daroguzo.simplelms.member.service;
 
 import com.daroguzo.simplelms.admin.dto.MemberDto;
+import com.daroguzo.simplelms.admin.model.MemberParam;
 import com.daroguzo.simplelms.member.entity.Member;
 import com.daroguzo.simplelms.member.model.MemberInput;
 import com.daroguzo.simplelms.member.model.ResetPasswordInput;
@@ -38,5 +39,5 @@ public interface MemberService extends UserDetailsService {
     /**
      * 회원 목록 반환(admin)
      */
-    List<MemberDto> list();
+    List<MemberDto> list(MemberParam memberParam);
 }

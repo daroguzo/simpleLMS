@@ -1,6 +1,7 @@
 package com.daroguzo.simplelms.admin.controller;
 
 import com.daroguzo.simplelms.admin.dto.MemberDto;
+import com.daroguzo.simplelms.admin.model.MemberParam;
 import com.daroguzo.simplelms.member.entity.Member;
 import com.daroguzo.simplelms.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -18,10 +19,10 @@ public class AdminMemberController {
 
     private final MemberService memberService;
 
-    @GetMapping("/list")
-    public String list(Model model) {
+    @GetMapping("/list.do")
+    public String list(Model model, MemberParam memberParam) {
 
-        List<MemberDto> members = memberService.list();
+        List<MemberDto> members = memberService.list(memberParam);
         model.addAttribute("list", members);
 
         return "/admin/member/list";

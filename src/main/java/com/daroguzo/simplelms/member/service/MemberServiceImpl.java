@@ -2,6 +2,7 @@ package com.daroguzo.simplelms.member.service;
 
 import com.daroguzo.simplelms.admin.dto.MemberDto;
 import com.daroguzo.simplelms.admin.mapper.MemberMapper;
+import com.daroguzo.simplelms.admin.model.MemberParam;
 import com.daroguzo.simplelms.component.MailComponents;
 import com.daroguzo.simplelms.member.entity.Member;
 import com.daroguzo.simplelms.member.exception.MemberNotEmailAuthException;
@@ -150,11 +151,9 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
-    public List<MemberDto> list() {
+    public List<MemberDto> list(MemberParam memberParam) {
 
-        MemberDto memberDto = new MemberDto();
-
-        return memberMapper.selectList(memberDto);
+        return memberMapper.selectList(memberParam);
     }
 
     private void sendAuthEmail(String email, String uuid) {

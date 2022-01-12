@@ -40,4 +40,9 @@ public interface MemberService extends UserDetailsService {
      * 회원 목록 반환(admin)
      */
     List<MemberDto> list(MemberParam memberParam);
+
+    /**
+     * 회원 상세 정보
+     */
+    MemberDto detail(String email);
 }

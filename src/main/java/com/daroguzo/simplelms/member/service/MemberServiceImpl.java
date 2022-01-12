@@ -170,6 +170,14 @@ public class MemberServiceImpl implements MemberService{
         return list;
     }
 
+    @Override
+    public MemberDto detail(String email) {
+        Optional<Member> byEmail = memberRepository.findByEmail(email);
+        Member member = byEmail.orElseThrow(() -> new UsernameNotFoundException("해당하는 사용자가 없습니다."));
+
+        return MemberDto.of(member);
+    }
+
     private void sendAuthEmail(String email, String uuid) {
         String subject = "LMS 시스템에 오신 것을 환영합니다.";
         String text = "<h2>LMS 시스템 가입 안내<h2>" +

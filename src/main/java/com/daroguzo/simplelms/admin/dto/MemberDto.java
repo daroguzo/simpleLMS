@@ -1,9 +1,16 @@
 package com.daroguzo.simplelms.admin.dto;
 
+import com.daroguzo.simplelms.member.entity.Member;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Data
 public class MemberDto {
     long id;
@@ -14,10 +21,10 @@ public class MemberDto {
     LocalDateTime regDt;
 
     boolean isEmailAuthorized;
-    LocalDateTime mailAuthDt;
+    LocalDateTime emailAuthDt;
     String emailAuthKey;
 
-    String resetPassword_key;
+    String resetPasswordKey;
     LocalDateTime resetPasswordLimitDt;
 
     boolean isAdmin;
@@ -26,4 +33,21 @@ public class MemberDto {
     long totalCount;
     // sequence
     long seq;
+
+    public static MemberDto of(Member member) {
+
+        return MemberDto.builder()
+                .email(member.getEmail())
+                .username(member.getUsername())
+                .phone(member.getPhone())
+                //.password(member.getPassword())
+                .regDt(member.getRegDt())
+                .isEmailAuthorized(member.isEmailAuthorized())
+                .emailAuthDt(member.getEmailAuthDt())
+                .emailAuthKey(member.getEmailAuthKey())
+                .resetPasswordKey(member.getResetPasswordKey())
+                .resetPasswordLimitDt(member.getResetPasswordLimitDt())
+                .isAdmin(member.isAdmin())
+                .build();
+    }
 }

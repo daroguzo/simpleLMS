@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class AdminMainController {
 
-    @GetMapping("/main")
+    @GetMapping("/main.do")
     public String main() {
 
         return "admin/main";

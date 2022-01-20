@@ -2,7 +2,7 @@ package com.daroguzo.simplelms.admin.controller;
 
 import com.daroguzo.simplelms.admin.dto.MemberDto;
 import com.daroguzo.simplelms.admin.model.MemberParam;
-import com.daroguzo.simplelms.member.model.MemberStatusInput;
+import com.daroguzo.simplelms.member.model.MemberAdminInput;
 import com.daroguzo.simplelms.member.service.MemberService;
 import com.daroguzo.simplelms.util.PageUtil;
 import lombok.RequiredArgsConstructor;
@@ -54,8 +54,15 @@ public class AdminMemberController {
     }
 
     @PostMapping("/status.do")
-    public String status(Model model, MemberStatusInput input) {
+    public String status(Model model, MemberAdminInput input) {
         boolean result = memberService.updateStatus(input.getEmail(), input.getMemberStatus());
+
+        return "redirect:/admin/member/detail.do?email=" + input.getEmail();
+    }
+
+    @PostMapping("/password.do")
+    public String password(Model model, MemberAdminInput input) {
+        boolean result = memberService.updatePassword(input.getEmail(), input.getPassword());
 
         return "redirect:/admin/member/detail.do?email=" + input.getEmail();
     }

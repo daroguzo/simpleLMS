@@ -50,4 +50,9 @@ public interface MemberService extends UserDetailsService {
      * 사용자 상태 변경
      */
     boolean updateStatus(String email, MemberStatus memberStatus);
+
+    /**
+     * 사용자 비밀번호 초기화
+     */
+    boolean updatePassword(String email, String password);
 }

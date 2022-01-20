@@ -4,8 +4,9 @@ import com.daroguzo.simplelms.member.entity.MemberStatus;
 import lombok.Data;
 
 @Data
-public class MemberStatusInput {
+public class MemberAdminInput {
 
     String email;
     MemberStatus memberStatus;
+    String password;
 }

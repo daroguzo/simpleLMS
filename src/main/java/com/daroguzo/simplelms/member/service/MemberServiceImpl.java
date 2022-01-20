@@ -195,6 +195,18 @@ public class MemberServiceImpl implements MemberService{
         return true;
     }
 
+    @Transactional
+    @Override
+    public boolean updatePassword(String email, String password) {
+        Member member = memberRepository.findByEmail(email).
+                orElseThrow(() -> new UsernameNotFoundException("회원 정보가 존재하지 않습니다."));
+
+        String encryptedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+        member.setPassword(encryptedPassword);
+        memberRepository.save(member);
+        return false;
+    }
+
     private void sendAuthEmail(String email, String uuid) {
         String subject = "LMS 시스템에 오신 것을 환영합니다.";
         String text = "<h2>LMS 시스템 가입 안내<h2>" +

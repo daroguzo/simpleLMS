@@ -5,7 +5,9 @@ import com.daroguzo.simplelms.admin.mapper.MemberMapper;
 import com.daroguzo.simplelms.admin.model.MemberParam;
 import com.daroguzo.simplelms.component.MailComponents;
 import com.daroguzo.simplelms.member.entity.Member;
+import com.daroguzo.simplelms.member.entity.MemberStatus;
 import com.daroguzo.simplelms.member.exception.MemberNotEmailAuthException;
+import com.daroguzo.simplelms.member.exception.StopMemberException;
 import com.daroguzo.simplelms.member.model.MemberInput;
 import com.daroguzo.simplelms.member.model.ResetPasswordInput;
 import com.daroguzo.simplelms.member.repository.MemberRepository;
@@ -56,6 +58,7 @@ public class MemberServiceImpl implements MemberService{
                 .regDt(LocalDateTime.now())
                 .isEmailAuthorized(false)
                 .emailAuthKey(uuid)
+                .memberStatus(MemberStatus.REQ)
                 .build();
         memberRepository.save(member);
 
@@ -81,6 +84,7 @@ public class MemberServiceImpl implements MemberService{
             return false;
         }
 
+        member.setMemberStatus(MemberStatus.ING);
         member.setEmailAuthorized(true);
         member.setEmailAuthDt(LocalDateTime.now());
         memberRepository.save(member);
@@ -178,6 +182,19 @@ public class MemberServiceImpl implements MemberService{
         return MemberDto.of(member);
     }
 
+    @Transactional
+    @Override
+    public boolean updateStatus(String email, MemberStatus memberStatus) {
+
+        Member member = memberRepository.findByEmail(email).
+                orElseThrow(() -> new UsernameNotFoundException("회원 정보가 존재하지 않습니다."));
+
+        member.setMemberStatus(memberStatus);
+        memberRepository.save(member);
+
+        return false;
+    }
+
     private void sendAuthEmail(String email, String uuid) {
         String subject = "LMS 시스템에 오신 것을 환영합니다.";
         String text = "<h2>LMS 시스템 가입 안내<h2>" +
@@ -197,10 +214,15 @@ public class MemberServiceImpl implements MemberService{
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-        Member member = memberRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(email));
+        Member member = memberRepository.findByEmail(email).
+                orElseThrow(() -> new UsernameNotFoundException("회원 정보가 존재하지 않습니다."));
 
-        if (!member.isEmailAuthorized()) {
+        if (member.getMemberStatus().isReq()) {
             throw new MemberNotEmailAuthException("이메일 활성화가 되지 않았습니다.");
+        }
+
+        if (member.getMemberStatus().isStop()) {
+            throw new StopMemberException("정지된 회원입니다.");
         }
 
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();

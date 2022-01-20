@@ -2,9 +2,7 @@ package com.daroguzo.simplelms.member.entity;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
@@ -30,4 +28,7 @@ public class Member {
     private LocalDateTime resetPasswordLimitDt;
 
     private boolean isAdmin;
+
+    @Enumerated(EnumType.STRING)
+    private MemberStatus memberStatus;
 }

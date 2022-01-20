@@ -1,6 +1,7 @@
 package com.daroguzo.simplelms.admin.dto;
 
 import com.daroguzo.simplelms.member.entity.Member;
+import com.daroguzo.simplelms.member.entity.MemberStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -28,6 +29,7 @@ public class MemberDto {
     LocalDateTime resetPasswordLimitDt;
 
     boolean isAdmin;
+    MemberStatus memberStatus;
 
     // 전체 개수
     long totalCount;
@@ -48,6 +50,7 @@ public class MemberDto {
                 .resetPasswordKey(member.getResetPasswordKey())
                 .resetPasswordLimitDt(member.getResetPasswordLimitDt())
                 .isAdmin(member.isAdmin())
+                .memberStatus(member.getMemberStatus())
                 .build();
     }
 }

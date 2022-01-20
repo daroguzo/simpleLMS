@@ -59,7 +59,24 @@
                         <p th:text="${member.isAdmin}"></p>
                     </td>
                 </tr>
-
+                <tr>
+                    <th>회원 상태</th>
+                    <td>
+                        <p>
+                            현재 상태:
+                            <span th:text="${member.memberStatus}"></span>
+                        </p>
+                        <form method="post" action="/admin/member/status.do">
+                            <input type="hidden" name="email" th:value="${member.email}"/>
+                            <select name="memberStatus">
+                                <option value="REQ"> 가입 승인 대기 </option>
+                                <option value="ING"> 등록된 사용자 </option>
+                                <option value="STOP"> 정지된 사용자 </option>
+                            </select>
+                            <button type="submit">상태변경</button>
+                        </form>
+                    </td>
+                </tr>
             </tbody>
         </table>
 

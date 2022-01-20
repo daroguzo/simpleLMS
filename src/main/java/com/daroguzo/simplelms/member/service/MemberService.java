@@ -2,7 +2,7 @@ package com.daroguzo.simplelms.member.service;
 
 import com.daroguzo.simplelms.admin.dto.MemberDto;
 import com.daroguzo.simplelms.admin.model.MemberParam;
-import com.daroguzo.simplelms.member.entity.Member;
+import com.daroguzo.simplelms.member.entity.MemberStatus;
 import com.daroguzo.simplelms.member.model.MemberInput;
 import com.daroguzo.simplelms.member.model.ResetPasswordInput;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -45,4 +45,9 @@ public interface MemberService extends UserDetailsService {
      * 회원 상세 정보
      */
     MemberDto detail(String email);
+
+    /**
+     * 사용자 상태 변경
+     */
+    boolean updateStatus(String email, MemberStatus memberStatus);
 }

@@ -192,7 +192,7 @@ public class MemberServiceImpl implements MemberService{
         member.setMemberStatus(memberStatus);
         memberRepository.save(member);
 
-        return false;
+        return true;
     }
 
     private void sendAuthEmail(String email, String uuid) {

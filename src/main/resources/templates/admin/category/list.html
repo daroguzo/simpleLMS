@@ -2,7 +2,16 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>admin member management</title>
+    <title>admin category management</title>
+    <style>
+        .list table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .list table th, .list table td {
+            border:solid 1px #000;
+        }
+    </style>
 
 </head>
 <body>
@@ -11,6 +20,14 @@
     <div th:replace="fragments/layout.html :: fragment-admin-menu"></div>
 
     <div class="list">
+
+        <div>
+            <form method="post" action="/admin/category/add.do">
+                <input type="text" name="categoryName" required placeholder="카테고리명 입력"/>
+                <button type="submit"> 추가 </button>
+            </form>
+        </div>
+
         <table>
             <thead>
                 <tr>
@@ -20,7 +37,14 @@
                 </tr>
             </thead>
             <tbody>
-
+            <tr th:each="c : ${list}">
+                <td th:text="${c.id}"> 1 </td>
+                <td th:text="${c.categoryName}"></td>
+                <td th:text="${c.sortValue}"></td>
+                <td>
+                    <p th:text="${c.isUsing()}"></p>
+                </td>
+            </tr>
             </tbody>
         </table>
 

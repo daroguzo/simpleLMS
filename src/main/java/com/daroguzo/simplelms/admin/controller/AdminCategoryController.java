@@ -34,7 +34,7 @@ public class AdminCategoryController {
     }
 
     @PostMapping("/add.do")
-    public String add(Model model, CategoryInput input) {
+    public String add(CategoryInput input) {
 
         boolean result = categoryService.add(input.getCategoryName());
 
@@ -42,8 +42,15 @@ public class AdminCategoryController {
     }
 
     @PostMapping("/delete.do")
-    public String delete(Model model, CategoryInput input) {
+    public String delete(CategoryInput input) {
         boolean result = categoryService.delete(input.getId());
+
+        return "redirect:/admin/category/list.do";
+    }
+
+    @PostMapping("/update.do")
+    public String update(CategoryInput input) {
+        boolean result = categoryService.update(input);
 
         return "redirect:/admin/category/list.do";
     }

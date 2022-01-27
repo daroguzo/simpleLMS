@@ -7,4 +7,6 @@ public class CategoryInput {
 
     Long id;
     String categoryName;
+    int sortValue;
+    boolean isUsing;
 }

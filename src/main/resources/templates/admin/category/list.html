@@ -11,7 +11,23 @@
         .list table th, .list table td {
             border:solid 1px #000;
         }
+        p.nothing {
+            text-align: center;
+            padding: 100px;
+        }
     </style>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function () {
+            $('form[name=deleteForm]').on('submit', function (){
+
+                if (!confirm(' 카테고리를 삭제하시겠습니까? ')) {
+                    return false;
+                }
+            });
+        });
+    </script>
 
 </head>
 <body>
@@ -35,6 +51,7 @@
                     <th> 카테고리명 </th>
                     <th> 순서 </th>
                     <th> 사용여부 </th>
+                    <th> 비고 </th>
                 </tr>
             </thead>
             <tbody>
@@ -44,6 +61,19 @@
                 <td th:text="${c.sortValue}"></td>
                 <td>
                     <p th:text="${c.isUsing()}"></p>
+                </td>
+                <td>
+                    <form name="deleteForm" method="post" action="/admin/category/delete.do">
+                        <input type="hidden" name="id" th:value="${c.id}"/>
+                        <button type="submit"> 삭제 </button>
+                    </form>
+                </td>
+            </tr>
+            <tr th:if="${#lists.size(list) < 1}">
+                <td colspan="5">
+                    <p class="nothing">
+                        내용이 없습니다.
+                    </p>
                 </td>
             </tr>
             </tbody>

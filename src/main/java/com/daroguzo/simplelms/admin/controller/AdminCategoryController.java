@@ -40,4 +40,11 @@ public class AdminCategoryController {
 
         return "redirect:/admin/category/list.do";
     }
+
+    @PostMapping("/delete.do")
+    public String delete(Model model, CategoryInput input) {
+        boolean result = categoryService.delete(input.getId());
+
+        return "redirect:/admin/category/list.do";
+    }
 }
